@@ -1,4 +1,2 @@
-
-$('li').on('click', function() {
-  model.printMessage();
-});
+// event handlers
+$( window ).on('load', model.startApp());
