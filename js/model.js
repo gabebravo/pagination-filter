@@ -9,6 +9,7 @@ const model = ( function() {
 // PAGEINIT HANDLERS
 // =============================================================================
 
+// on page load all the functions are called to build dynamic HTML with JS
   function addSeachAndPagination() {
     setInitialList();
     addSearchInput();
@@ -16,6 +17,7 @@ const model = ( function() {
     addSearchFeedback();
   }
 
+// loops through the first 10 <li> and shows them. Hides the rest.
   function setInitialList() {
     $studentList.each(function( index ) {
         if ( index >= 10 ) {
@@ -26,6 +28,7 @@ const model = ( function() {
     });
   }
 
+// adds the search box
   function addSearchInput() {
     let $searchBox = (`
       <div class="student-search">
@@ -35,6 +38,7 @@ const model = ( function() {
     $pageHeader.append($searchBox);
   }
 
+// adds the pagination buttons to the page accounting for number of <li>
   function addPaginationButtons() {
 
     let length = 0;
@@ -55,6 +59,7 @@ const model = ( function() {
     }
   }
 
+// adds the error message for no search results
   function addSearchFeedback(){
     $('ul.student-list').append('<p class="no-results">No Result Have Been Found</p>');
     $('p').hide();
@@ -63,12 +68,15 @@ const model = ( function() {
 // ONPAGE HANDLERS
 // =============================================================================
 
+// resets error message and input, detects pagintion button, accounts for paging number
   function changePagination() {
     $('p').hide();
+    $('input').val('');
     const pageBtnClicked = $(this).text();
     pageBtnClicked === "1" ? setInitialList() : calculatePageChange(pageBtnClicked);
   }
 
+// gets search input, accounts for empty input, passes the query for search, handles errors
   function searchListItems(){
     const userInput = $(this).closest('div').find('input').val().split('@')[0];
     const queryStr = formatStrings(userInput);
@@ -84,6 +92,7 @@ const model = ( function() {
 // HELPER FUNCTIONS
 // =============================================================================
 
+// calulates which <li> to display based on the pagination button clicked
   function calculatePageChange(page) {
     const pageCount = parseInt(page) * 10;
     $studentList.each(function( index ) {
@@ -95,12 +104,14 @@ const model = ( function() {
     });
   }
 
+// uses regex to format the search input for querying
   function formatStrings(str){
     $('input').val('');
     const regex = /[^a-z0-9]/gi;
     return str.replace(regex,'').toLowerCase();
   }
 
+// performs query by looping <li>, shows and hides accordingly, returns count of mathces
   function filterItems(query) {
     let count = 0;
     $.map( $studentList, function( li ) {
